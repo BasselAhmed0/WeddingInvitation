@@ -958,6 +958,37 @@ footer p {
 }
 
 /* =====================================================
+   DESKTOP OVERRIDE — undo the 50dvh mobile pairing
+   ===================================================== */
+@media (min-width: 769px) {
+  /* Restore natural height — no forced 50dvh on large screens */
+  .countdown-section,
+  .verse-section,
+  .details-section {
+    height: auto;
+    min-height: 60vh;
+    padding: 100px 40px;
+    display: block; /* undo flex centering */
+  }
+
+  /* Details section: show the label and heading on desktop */
+  .details-body > .label,
+  .details-body > .display-title { display: block; }
+
+  /* Details card: restore full padding */
+  .details-card { padding: 64px 52px; }
+  .detail-group { padding: 52px 0; }
+
+  /* Restore scroll snap on all sections for desktop */
+  .verse-section,
+  .details-section { scroll-snap-align: start; }
+
+  /* Restore border removal — sections stand alone on desktop */
+  .verse-section  { border-top: none; }
+  .details-section { border-top: none; }
+}
+
+/* =====================================================
    RESPONSIVE — MOBILE FIRST OPTIMIZATION
    ===================================================== */
 
@@ -1195,7 +1226,7 @@ footer p {
       <div class="hero-rule reveal delay-2"></div>
 
       <p class="hero-date reveal delay-3">3 April 2026</p>
-      <p class="hero-location reveal delay-4">Luna Open Air &nbsp;·&nbsp; Algiers</p>
+      <p class="hero-location reveal delay-4">Luna Open Air &nbsp;·&nbsp; Cairo</p>
     </div>
 
   </section>
