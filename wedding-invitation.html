@@ -148,6 +148,45 @@ img { display: block; }
   opacity: 0.7;
 }
 
+/* Gold divider pinned to the bottom of each section */
+.section-bottom-divider {
+  position: absolute;
+  bottom: 0;
+  left: 0; right: 0;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+.section-bottom-divider::before {
+  content: '';
+  position: absolute;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(212,175,55,0.3) 15%,
+    var(--gold) 30%,
+    var(--gold-light) 50%,
+    var(--gold) 70%,
+    rgba(212,175,55,0.3) 85%,
+    transparent 100%
+  );
+}
+.section-bottom-divider::after {
+  content: '\2726';
+  font-size: 13px;
+  color: var(--gold);
+  background: var(--bg);
+  padding: 0 14px;
+  opacity: 0.75;
+  position: relative;
+  z-index: 1;
+}
+
 /* =====================================================
    UTILITY: TYPOGRAPHY
    ===================================================== */
@@ -423,11 +462,11 @@ img { display: block; }
    ===================================================== */
 .verse-section {
   position: relative;
-  height: 50dvh;
+  min-height: 100dvh;
   padding: 24px 32px;
   text-align: center;
   overflow: hidden;
-  scroll-snap-align: start; /* snap here shows verse (top 50dvh) + details (bottom 50dvh) */
+  scroll-snap-align: start;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -442,9 +481,9 @@ img { display: block; }
 
 .verse-arabic {
   font-family: 'Amiri', 'Traditional Arabic', Georgia, serif;
-  font-size: clamp(22px, 3.8vw, 34px);
+  font-size: clamp(28px, 5vw, 52px);
   color: var(--gold);
-  line-height: 2.6;
+  line-height: 2.2;
   direction: rtl;
   text-align: center;
   margin: 52px 0;
@@ -454,7 +493,7 @@ img { display: block; }
 
 .verse-ref {
   font-family: 'Amiri', 'Traditional Arabic', serif;
-  font-size: clamp(14px, 2vw, 17px);
+  font-size: clamp(15px, 2.2vw, 20px);
   direction: rtl;
   text-align: center;
   color: var(--cream-muted);
@@ -493,7 +532,7 @@ img { display: block; }
    ===================================================== */
 .countdown-section {
   position: relative;
-  height: 50dvh;
+  min-height: 100dvh;
   padding: 24px 24px;
   text-align: center;
   overflow: hidden;
@@ -583,7 +622,7 @@ img { display: block; }
    ===================================================== */
 .details-section {
   position: relative;
-  height: 50dvh;
+  min-height: 100dvh;
   padding: 20px 24px;
   overflow: hidden;
   scroll-snap-align: start;
@@ -961,12 +1000,11 @@ footer p {
    DESKTOP OVERRIDE — undo the 50dvh mobile pairing
    ===================================================== */
 @media (min-width: 769px) {
-  /* Restore natural height — no forced 50dvh on large screens */
+  /* Restore natural height on large screens */
   .countdown-section,
   .verse-section,
   .details-section {
-    height: auto;
-    min-height: 60vh;
+    min-height: 80vh;
     padding: 100px 40px;
     display: block; /* undo flex centering */
   }
@@ -975,9 +1013,12 @@ footer p {
   .details-body > .label,
   .details-body > .display-title { display: block; }
 
-  /* Details card: restore full padding */
-  .details-card { padding: 64px 52px; }
+  /* Details card: restore full padding and natural max-width */
+  .details-card { padding: 64px 52px; max-width: 700px; width: auto; }
   .detail-group { padding: 52px 0; }
+
+  /* Map button: inline on desktop */
+  .map-btn { display: inline-flex; width: auto; }
 
   /* Restore scroll snap on all sections for desktop */
   .verse-section,
@@ -986,6 +1027,10 @@ footer p {
   /* Restore border removal — sections stand alone on desktop */
   .verse-section  { border-top: none; }
   .details-section { border-top: none; }
+
+  /* Restore arabic verse to desktop size */
+  .verse-arabic { font-size: clamp(28px, 5vw, 52px); }
+  .detail-main { font-size: clamp(22px, 3.5vw, 30px); }
 }
 
 /* =====================================================
@@ -994,43 +1039,50 @@ footer p {
 
 /* ── TABLET & SMALL LAPTOP (768px and down) ──────────── */
 @media (max-width: 768px) {
-  /* Keep min-height: 100vh on all sections — just reduce side padding */
-  .hero { padding: 40px 20px; }
-  .verse-section { padding: 20px 20px; }
-  .countdown-section { padding: 20px 20px; }
-  .details-section { padding: 16px 20px; }
-  .closing-section { padding: 0 20px; }
+  /* Sections: generous padding so content breathes */
+  .hero { padding: 60px 24px; }
+  .verse-section { padding: 60px 24px; }
+  .countdown-section { padding: 60px 24px; }
+  .details-section { padding: 60px 20px; }
+  .closing-section { padding: 0 24px; }
 
-  /* Typography: ensure readable minimums on mobile */
-  .label { font-size: 10px; letter-spacing: 7px; margin-bottom: 14px; }
-  .display-title { font-size: clamp(22px, 4vw, 32px); margin-bottom: 16px; }
-  .body-text { font-size: 14px; line-height: 1.8; }
+  /* Typography: larger minimums on mobile */
+  .label { font-size: 11px; letter-spacing: 7px; margin-bottom: 16px; }
+  .display-title { font-size: clamp(28px, 5vw, 40px); margin-bottom: 20px; }
+  .body-text { font-size: 15px; line-height: 1.9; }
 
   /* Hero adjustments */
-  .hero-label { font-size: 10px; letter-spacing: 6px; margin-bottom: 20px; }
-  .hero-names { font-size: clamp(44px, 9vw, 72px); }
-  .hero-date { font-size: 13px; letter-spacing: 5px; }
-  .hero-location { font-size: 16px; }
+  .hero-label { font-size: 11px; letter-spacing: 6px; margin-bottom: 24px; }
+  .hero-names { font-size: clamp(52px, 12vw, 80px); }
+  .hero-date { font-size: 14px; letter-spacing: 6px; }
+  .hero-location { font-size: 18px; }
 
   /* Countdown: switch to 2x2 grid on mobile */
   .countdown-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    max-width: 260px;
-    margin: 24px auto 0;
+    gap: 28px;
+    max-width: 300px;
+    margin: 32px auto 0;
   }
   .cd-item { padding: 0; }
-  .cd-num { font-size: clamp(36px, 6vw, 52px); }
-  .cd-lbl { font-size: 9px; letter-spacing: 3px; margin-top: 8px; }
+  .cd-num { font-size: clamp(48px, 10vw, 72px); }
+  .cd-lbl { font-size: 10px; letter-spacing: 4px; margin-top: 10px; }
   .cd-sep { display: none; }
 
-  /* Verse: tighten arabic text margins */
-  .verse-arabic { margin: 20px 0; }
+  /* Verse: give arabic text room to breathe */
+  .verse-arabic { font-size: clamp(26px, 6vw, 44px); line-height: 2.4; margin: 40px 0; }
+  .verse-ref { font-size: clamp(14px, 3vw, 18px); }
+
+  /* Details: full width card */
+  .details-body { max-width: 100%; }
+  .details-card { padding: 36px 28px; max-width: 100%; width: 100%; }
+  .detail-group { padding: 28px 0; }
+  .detail-main { font-size: clamp(20px, 4vw, 28px); }
+  .detail-sub { font-size: 15px; line-height: 1.8; }
+  .map-btn { display: flex; width: 100%; justify-content: center; margin-top: 24px; }
 
   /* Cards & spacing */
-  .details-card { padding: 28px 24px; }
-  .detail-group { padding: 20px 0; }
   .tl-card { font-size: 13px; }
 
   /* Timeline mobile */
@@ -1063,16 +1115,10 @@ footer p {
     width: 100%;
   }
 
-  /* Music button: ensure 44px minimum */
-  .music-btn {
-    width: 44px;
-    height: 44px;
-  }
-
   /* Closing section */
-  .closing-names { font-size: clamp(36px, 7vw, 52px); margin: 20px 0 10px; }
-  .closing-date { font-size: 11px; margin-bottom: 24px; }
-  .closing-message { font-size: 15px; margin: 0 auto 24px; }
+  .closing-names { font-size: clamp(40px, 9vw, 60px); margin: 24px 0 12px; }
+  .closing-date { font-size: 12px; margin-bottom: 28px; }
+  .closing-message { font-size: 16px; margin: 0 auto 28px; }
 
   /* Footer */
   footer { padding: 24px 16px; }
@@ -1081,48 +1127,43 @@ footer p {
 
 /* ── MOBILE PHONE (480px and down) ──────────────────── */
 @media (max-width: 480px) {
-  /* Reduce padding further on tiny phones */
-  .hero { padding: 30px 16px; }
-  .verse-section { padding: 16px 16px; }
-  .countdown-section { padding: 16px 16px; }
-  .details-section { padding: 12px 16px; }
-  .closing-section { padding: 0 16px; }
+  /* Comfortable padding on small phones */
+  .hero { padding: 48px 20px; }
+  .verse-section { padding: 48px 20px; }
+  .countdown-section { padding: 48px 20px; }
+  .details-section { padding: 48px 16px; }
+  .closing-section { padding: 0 20px; }
 
-  /* Typography for tiny screens */
-  .label { font-size: 9px; letter-spacing: 5px; margin-bottom: 12px; }
-  .display-title { font-size: clamp(20px, 3.5vw, 26px); margin-bottom: 20px; }
+  /* Typography for small screens — bigger, not smaller */
+  .label { font-size: 10px; letter-spacing: 6px; margin-bottom: 14px; }
+  .display-title { font-size: clamp(26px, 6vw, 36px); margin-bottom: 20px; }
 
   /* Hero */
-  .hero-names { font-size: clamp(38px, 8vw, 48px); }
-  .hero-label { font-size: 9px; margin-bottom: 16px; }
-  .hero-date { font-size: 12px; letter-spacing: 4px; }
-  .hero-location { font-size: 14px; }
-  .scroll-cue p { font-size: 8px; }
+  .hero-names { font-size: clamp(44px, 11vw, 64px); }
+  .hero-label { font-size: 10px; margin-bottom: 20px; }
+  .hero-date { font-size: 13px; letter-spacing: 5px; }
+  .hero-location { font-size: 16px; }
+  .scroll-cue p { font-size: 9px; }
 
-  /* Verse section */
-  .verse-arabic { font-size: 18px; line-height: 1.8; margin: 12px 0; }
-  .verse-english { font-size: 14px; line-height: 1.7; }
-  .verse-ref { font-size: 9px; }
-
-  /* Gold divider width on mobile */
-  .gold-rule { width: 200px; gap: 10px; }
-  .section-divider { height: 32px; }
-  .section-divider::after { font-size: 11px; padding: 0 10px; }
+  /* Verse section — large, proud Arabic text */
+  .verse-arabic { font-size: clamp(22px, 7vw, 36px); line-height: 2.2; margin: 32px 0; }
+  .verse-english { font-size: 14px; line-height: 1.8; }
+  .verse-ref { font-size: 12px; }
 
   /* Countdown adjustments */
-  .countdown-grid { grid-template-columns: 1fr 1fr; gap: 20px; }
-  .cd-num { font-size: clamp(32px, 5.5vw, 44px); }
+  .countdown-grid { grid-template-columns: 1fr 1fr; gap: 24px; max-width: 280px; }
+  .cd-num { font-size: clamp(44px, 12vw, 64px); }
+  .cd-lbl { font-size: 9px; letter-spacing: 3px; }
 
-  /* Details card: hide the outer label/heading, just show the card */
+  /* Details card: full width, hide outer label/heading */
   .details-body > .label,
   .details-body > .display-title { display: none; }
-  .details-card { padding: 20px 18px; border-radius: 6px; }
-  .detail-group { padding: 10px 0; }
-  .detail-label { font-size: 9px; letter-spacing: 6px; margin-bottom: 8px; }
-  .detail-main { font-size: clamp(16px, 3vw, 20px); margin-bottom: 4px; }
-  .detail-sub { font-size: 13px; line-height: 1.5; }
-  .gold-divider { width: 160px; gap: 8px; }
-  .map-btn { margin-top: 16px; padding: 10px 24px; font-size: 9px; }
+  .details-card { padding: 28px 20px; border-radius: 6px; width: 100%; max-width: 100%; }
+  .detail-group { padding: 20px 0; }
+  .detail-label { font-size: 9px; letter-spacing: 6px; margin-bottom: 10px; }
+  .detail-main { font-size: clamp(18px, 5vw, 26px); margin-bottom: 6px; }
+  .detail-sub { font-size: 14px; line-height: 1.7; }
+  .map-btn { display: flex; width: 100%; justify-content: center; margin-top: 20px; padding: 13px 24px; font-size: 9px; }
 
   /* Timeline cards */
   .tl-time { font-size: 18px; }
@@ -1140,20 +1181,17 @@ footer p {
   .rsvp-form textarea { min-height: 80px; }
 
   /* Closing */
-  .closing-names { font-size: clamp(32px, 6.5vw, 44px); margin: 16px 0 8px; }
-  .closing-date { font-size: 10px; margin-bottom: 18px; }
-  .closing-message { font-size: 14px; line-height: 1.7; margin-bottom: 18px; }
-
-  /* Section divider star sizing */
-  .section-divider::after { font-size: 11px; }
+  .closing-names { font-size: clamp(36px, 9vw, 52px); margin: 20px 0 10px; }
+  .closing-date { font-size: 11px; margin-bottom: 20px; }
+  .closing-message { font-size: 15px; line-height: 1.8; margin-bottom: 20px; }
 }
 
 /* ── EXTRA SMALL (320px) – iPhone SE, old phones ──────── */
 @media (max-width: 380px) {
-  .verse-arabic { font-size: 16px; }
-  .hero-names { font-size: 34px; }
-  .details-card { padding: 28px 14px; }
-  .gold-rule { width: 140px; gap: 6px; }
+  .verse-arabic { font-size: clamp(18px, 6vw, 26px); line-height: 2.0; }
+  .hero-names { font-size: clamp(36px, 10vw, 50px); }
+  .details-card { padding: 24px 14px; }
+  .cd-num { font-size: clamp(38px, 11vw, 56px); }
 }
 
 /* Disable snap for users who prefer reduced motion */
@@ -1229,9 +1267,8 @@ footer p {
       <p class="hero-location reveal delay-4">Luna Open Air &nbsp;·&nbsp; Cairo</p>
     </div>
 
+    <div class="section-bottom-divider"></div>
   </section>
-
-  <div class="section-divider"></div>
 
   <!-- ── PAGE 2 · COUNTDOWN ────────────────────── -->
   <section class="countdown-section">
@@ -1267,6 +1304,7 @@ footer p {
         </div>
       </div>
     </div>
+    <div class="section-bottom-divider"></div>
   </section>
 
   <!-- ── PAGE 3 · QURAN (Arabic only) ─────────── -->
@@ -1297,6 +1335,7 @@ footer p {
         <div class="r-line"></div>
       </div>
     </div>
+    <div class="section-bottom-divider"></div>
   </section>
 
   <!-- ── PAGE 4 · CEREMONY DETAILS ────────────── -->
@@ -1346,9 +1385,8 @@ footer p {
         </div>
       </div>
     </div>
+    <div class="section-bottom-divider"></div>
   </section>
-
-  <div class="section-divider"></div>
 
   <!-- ── PAGE 5 · CLOSING ──────────────────────── -->
   <section class="closing-section">
